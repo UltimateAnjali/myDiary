@@ -25,31 +25,62 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyBOEndO0wN6fNvh4m9uk4JIGARnnx4ShdM",
+  authDomain: "react-native-sample-ba39c.firebaseapp.com",
+  databaseURL: "https://react-native-sample-ba39c.firebaseio.com",
+  storageBucket: "react-native-sample-ba39c.appspot.com",
+};
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+
 //type Props = {};
 export default class App extends Component {
   state={
-    title: ''
+    title: "",
+    titles: []
   }
+
   titleNameChangedHandler = value => {
     this.setState({
       title: value
     });
-  }
+  };
+
+  titleSaveHandler = () => {
+    if(this.state.title.trim() === ""){
+      return;
+    }
+
+    this.setState(prevState => {
+      return {
+        titles: prevState.titles.concat(prevState.title)
+      };
+    });
+  };
+  
   render() {
+    const titlesOutput = this.state.titles.map((title,i) => (
+      <Text key={i}>{title}</Text> 
+    ));
     return (
       <View style={styles.container}>
-        <TextInput 
+        <TextInput
           style = {styles.titleText}
           placeholder = "Title"
           value={this.state.title}
-          onChangeText={this.titleNameChangedHandler}/>
+          onChangeText={this.titleNameChangedHandler}/> 
+
+        <View>
+          {titlesOutput}
+        </View>              
 
         <ActionButton 
           buttonColor="rgba(231,76,60,1)" 
-          icon={<Icon name="md-arrow-forward" style={styles.actionButtonIcon} />} 
-          onPress={() => console.log("notes tapped!")}>
-        </ActionButton>
-
+          icon={<Icon name="md-arrow-forward" 
+          style={styles.actionButtonIcon} />} 
+          onPress={this.titleSaveHandler}>
+        </ActionButton>              
       </View>
     );
   }
