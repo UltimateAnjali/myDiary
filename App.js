@@ -34,11 +34,19 @@ const firebaseConfig = {
 };
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-//type Props = {};
 export default class App extends Component {
+  
+  constructor(props){
+    super(props);
+    this.itemsRef = this.getRef().child('items');
+  }
+
+  getRef() {
+    return firebaseApp.database().ref();
+  }
+
   state={
     title: "",
-    titles: []
   }
 
   titleNameChangedHandler = value => {
@@ -51,29 +59,19 @@ export default class App extends Component {
     if(this.state.title.trim() === ""){
       return;
     }
+    this.itemsRef.push({title: this.state.title.trim()});
 
-    this.setState(prevState => {
-      return {
-        titles: prevState.titles.concat(prevState.title)
-      };
-    });
   };
   
   render() {
-    const titlesOutput = this.state.titles.map((title,i) => (
-      <Text key={i}>{title}</Text> 
-    ));
     return (
-      <View style={styles.container}>
+      <View style={styles.container}>              
+
         <TextInput
           style = {styles.titleText}
           placeholder = "Title"
           value={this.state.title}
           onChangeText={this.titleNameChangedHandler}/> 
-
-        <View>
-          {titlesOutput}
-        </View>              
 
         <ActionButton 
           buttonColor="rgba(231,76,60,1)" 
