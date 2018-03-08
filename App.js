@@ -6,8 +6,8 @@
 
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
-import ActionButton from 'react-native-action-button';
-import Icon from 'react-native-vector-icons/Ionicons';
+// import ActionButton from 'react-native-action-button';
+// import Icon from 'react-native-vector-icons/Ionicons';
 import {
   Platform,
   StyleSheet,
@@ -17,6 +17,8 @@ import {
 } from 'react-native';
 
 const styles = require('./styles.js')
+const FloatingActionButton = require('./components/FloatingActionButton');
+const TitleName = require('./components/TitleName');
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -35,7 +37,7 @@ const firebaseConfig = {
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 export default class App extends Component {
-  
+
   constructor(props){
     super(props);
     this.itemsRef = this.getRef().child('items');
@@ -50,9 +52,9 @@ export default class App extends Component {
   }
 
   titleNameChangedHandler = value => {
-    this.setState({
-      title: value
-    });
+      this.setState({
+        title: value
+      });
   };
 
   titleSaveHandler = () => {
@@ -67,18 +69,13 @@ export default class App extends Component {
     return (
       <View style={styles.container}>              
 
-        <TextInput
-          style = {styles.titleText}
-          placeholder = "Title"
+        <TitleName
           value={this.state.title}
-          onChangeText={this.titleNameChangedHandler}/> 
+          onChangeText={this.titleNameChangedHandler}/>
 
-        <ActionButton 
-          buttonColor="rgba(231,76,60,1)" 
-          icon={<Icon name="md-arrow-forward" 
-          style={styles.actionButtonIcon} />} 
+        <FloatingActionButton
           onPress={this.titleSaveHandler}>
-        </ActionButton>              
+        </FloatingActionButton>              
       </View>
     );
   }
